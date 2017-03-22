@@ -3,7 +3,7 @@
 import urllib
 import json
 import os
-import mysql.connector
+
 
 from flask import Flask
 from flask import request
@@ -12,12 +12,6 @@ from flask import make_response
 # Flask app should start in global layout
 app = Flask(__name__)
 
-
-
-cnx = mysql.connector.connect(user='root', password='Natraj123$',
-                              host='localhost',
-                              database='assistservice')
-cursor=cnx.cursor()
 @app.route('/webhook', methods=['POST'])
 
 def webhook():
@@ -62,7 +56,3 @@ if __name__ == '__main__':
     print "Starting app on port %d" % port
 
     app.run(debug=True, port=port, host='0.0.0.0')
-
-
-cursor.close()
-cnx.close()
