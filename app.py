@@ -64,27 +64,5 @@ if __name__ == '__main__':
     app.run(debug=True, port=port, host='0.0.0.0')
 
 
-
-add_employee = ("INSERT INTO employee "
-               "(first_name, last_name, gender) "
-               "VALUES (%s, %s, %s)")
-
-data_employee = (cuisine_type, 'Vanderkelen', 'M')
-
-# Insert new employee
-cursor.execute(add_employee, data_employee)
-
-
-# Make sure data is committed to the database
-cnx.commit()
-query = ("SELECT first_name, last_name FROM employee ")
-        
-
-
-cursor.execute(query)
-
-for (first_name, last_name) in cursor:
-  print("{}, {} was hired on".format(
-    last_name, first_name))
 cursor.close()
 cnx.close()
