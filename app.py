@@ -38,14 +38,10 @@ def makeWebhookResult(req):
     if req.get("result").get("action") != "food.discovery":
         return {}
     result = req.get("result")
+	parameters = result.get("parameters")
+    cuisine = parameters.get("cuisine-type")
 	
-    parameters = result.get("parameters")
-	cuisine = parameters.get("cuisine-type")
-	
-    speech = "Cuisine is"  + cuisine
-	
-	print("Response:")
-    print(speech)
+    speech = "Cuisine is" + cuisine
 	
 #add_employee = ("INSERT INTO employees "
  #              "(first_name, last_name, gender)"
