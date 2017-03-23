@@ -8,12 +8,11 @@ from flask import Flask
 from flask import request
 from flask import make_response
 
-
 # Flask app should start in global layout
 app = Flask(__name__)
 
-@app.route('/webhook', methods=['POST'])
 
+@app.route('/webhook', methods=['POST'])
 def webhook():
     req = request.get_json(silent=True, force=True)
 
@@ -32,14 +31,15 @@ def makeWebhookResult(req):
     if req.get("result").get("action") != "food.discovery":
         return {}
     result = req.get("result")
-	parameters = result.get("parameters")
+    parameters = result.get("parameters")
     cuisine = parameters.get("cuisine-type")
-	
-    speech = "Cuisine is" + cuisine
-	
-	print("Response:")
-    print(speech)
 
+ 
+
+    speech = "Cuisine is " + cuisine
+
+    print("Response:")
+    print(speech)
 
     return {
         "speech": speech,
@@ -56,4 +56,3 @@ if __name__ == '__main__':
     print "Starting app on port %d" % port
 
     app.run(debug=True, port=port, host='0.0.0.0')
-
