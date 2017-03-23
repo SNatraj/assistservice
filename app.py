@@ -1,15 +1,7 @@
 #!/usr/bin/env python
 
 
-from __future__ import print_function
-from future.standard_library import install_aliases
-install_aliases()
-
-from urllib.parse import urlparse, urlencode
-from urllib.request import urlopen, Request
-from urllib.error import HTTPError
-
-#import urllib
+import urllib
 import json
 import os
 
@@ -41,15 +33,20 @@ def makeWebhookResult(req):
     if req.get("result").get("action") != "food.discovery":
         return {}
     result = req.get("result")
-    entities = result.get("parameters")
-    Distance = entities.get('restaurant-distance')
-	cuisine = entities.get('cuisine-type')
-
-    speech = "Cuisine is"  + Distance + cuisine
-
-    print("Response:")
+	
+    parameters1 = result.get("parameters")
+	cuisine = parameters1.get('cuisine-type')
+    speech = "Cuisine is"  + cuisine
+	print("Response:")
     print(speech)
 
+	parameters2 = result.get("parameters")
+	distance = parameters2.get('restaurant-distance')
+    speech = "Distance is"  + distance
+	print("Response:")
+    print(speech)
+
+	
     return {
         "speech": speech,
         "displayText": speech,
