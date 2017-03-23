@@ -5,10 +5,6 @@ import json
 import os
 import mysql.connector
 
-cnx = mysql.connector.connect(user='root', password='Natraj123$',
-                              host='localhost',
-                              database='assistservice')
-cursor=cnx.cursor()
 
 from flask import Flask
 from flask import request
@@ -26,6 +22,21 @@ def webhook():
     print(json.dumps(req, indent=4))
 
     res = makeWebhookResult(req)
+
+    res = json.dumps(res, indent=4)
+    print(res)
+	
+	makeinsert(req)
+		
+    r = make_response(res)
+    r.headers['Content-Type'] = 'application/json'
+    return r
+	
+def makeinsert(req):
+	cnx = mysql.connector.connect(user='root', password='Natraj123$',
+                              host='localhost',
+                              database='assistservice')
+	cursor=cnx.cursor()
 	
 	add_employee = ("INSERT INTO employees "
                "(first_name,last_name,gender) "
@@ -42,15 +53,8 @@ def webhook():
 
 	cursor.close()
 	cnx.close()
+	return {}
 	
-    res = json.dumps(res, indent=4)
-    print(res)
-    r = make_response(res)
-    r.headers['Content-Type'] = 'application/json'
-    return r
-	
-
-
 def makeWebhookResult(req):
     if req.get("result").get("action") != "food.discovery":
         return {}
