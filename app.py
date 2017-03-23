@@ -36,7 +36,7 @@ def makeWebhookResult(req):
     cuisine-type = parameters.get("cuisine-type")
 	distance = parameters.get("restaurant-distance")
 
-    speech = "Cuisine is" + cuisine-type 
+    speech = "Cuisine is" 
 
     print("Response:")
     print(speech)
@@ -46,7 +46,7 @@ def makeWebhookResult(req):
         "displayText": speech,
         #"data": {},
         # "contextOut": [],
-        "source": "apiai-assistservice"
+        "source": "apiai-assistservice1"
     }
 
 
