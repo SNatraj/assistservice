@@ -34,8 +34,9 @@ def makeWebhookResult(req):
     result = req.get("result")
     entities = result.get("parameters")
     Distance = entities.get("restaurant-distance")
+	cuisine = entities.get("cuisine-type")
 
-    speech = "Cuisine is"  + Distance
+    speech = "Cuisine is"  + Distance + cuisine
 
     print("Response:")
     print(speech)
