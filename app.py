@@ -28,15 +28,19 @@ def webhook():
     return r
 
 def makeWebhookResult(req):
-    if req.get("result").get("action") != "food.discovery":
-        return {}
+    #	if req.get("result").get("action") != "food.discovery":
+     #   return {}
     #result = req.get("result")
     #parameters = result.get("parameters")
     #cuisine_type = parameters.get("cuisine_type")
 	#distance = parameters.get("restaurant_distance")
 
     #speech = "Cuisine is" + cuisine_type + " " + distance
+	
+	
 	speech = "Test run"
+	
+	
     print("Response:")
     print(speech)
 
