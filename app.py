@@ -5,9 +5,9 @@ import json
 import os
 import mysql.connector
 
-cnx = mysql.connector.connect(user='scott', password='Natraj123$',
-                              host='35.160.103.78',
-                              database='idea_zomato')
+cnx = mysql.connector.connect(user='root', password='Natraj123$',
+                              host='localhost',
+                              database='assistservice')
 cursor=cnx.cursor()
 
 from flask import Flask
