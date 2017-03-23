@@ -33,7 +33,7 @@ def makeWebhookResult(req):
         return {}
     result = req.get("result")
     parameters = result.get("parameters")
-    cuisine-type = parameters.get("cuisine-type")
+    cuisine = parameters.get("cuisine-type")
 	distance = parameters.get("restaurant-distance")
 
     speech = "Cuisine is" 
