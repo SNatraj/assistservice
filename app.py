@@ -40,19 +40,20 @@ def makeWebhookResult(req):
     result = req.get("result")
 	
     parameters = result.get("parameters")
-	cuisine = parameters.get('cuisine-type')
+	cuisine = parameters.get("cuisine-type")
+	
     speech = "Cuisine is"  + cuisine
+	
 	print("Response:")
     print(speech)
 	
 add_employee = ("INSERT INTO employees "
-               "(first_name, last_name, gender) "
+               "(first_name, last_name, gender)"
                "VALUES (%s, %s, %s)")
-data_employee = ('Geert', 'Vanderkelen',  'M')
+data_employee = ('abc', 'def',  'F')
 
 # Insert new employee
 cursor.execute(add_employee, data_employee)
-emp_no = cursor.lastrowid
 
 # Make sure data is committed to the database
 cnx.commit()
