@@ -32,8 +32,8 @@ def makeWebhookResult(req):
     if req.get("result").get("action") != "food.discovery":
         return {}
     result = req.get("result")
-    parameters = result.get("parameters")
-    Distance = parameters.get("restaurant-distance")
+    entities = result.get("parameters")
+    Distance = entities.get("restaurant-distance")
 
     speech = "Cuisine is"  + Distance
 
