@@ -36,10 +36,17 @@ def makeWebhookResult(req):
 	#distance = parameters.get("restaurant_distance")
 
     #speech = "Cuisine is" + cuisine_type + " " + distance
+	    if req.get("result").get("action") != "food.discovery":
+        return {}
+    result = req.get("result")
+    parameters = result.get("parameters")
+    zone = parameters.get("geo-city")
+
+    cost = {'Europe':100, 'North America':200, 'South America':300, 'Asia':400, 'Africa':500}
+
+    speech = "The cost of shipping to " + zone + " is " + str(cost[zone]) + " euros."
 	
-	
-	speech = "Test run"
-	
+
 	
     print("Response:")
     print(speech)
