@@ -3,7 +3,7 @@
 import urllib
 import json
 import os
-import mysql.connector
+
 
 from flask import Flask
 from flask import request
@@ -12,12 +12,6 @@ from flask import make_response
 # Flask app should start in global layout
 app = Flask(__name__)
 
-
-
-cnx = mysql.connector.connect(user='root', password='Natraj123$',
-                              host='localhost',
-                              database='assistservice')
-cursor=cnx.cursor()
 @app.route('/webhook', methods=['POST'])
 
 def webhook():
@@ -63,28 +57,3 @@ if __name__ == '__main__':
 
     app.run(debug=True, port=port, host='0.0.0.0')
 
-
-
-add_employee = ("INSERT INTO employee "
-               "(first_name, last_name, gender) "
-               "VALUES (%s, %s, %s)")
-
-data_employee = (cuisine_type, 'Vanderkelen', 'M')
-
-# Insert new employee
-cursor.execute(add_employee, data_employee)
-
-
-# Make sure data is committed to the database
-cnx.commit()
-query = ("SELECT first_name, last_name FROM employee ")
-        
-
-
-cursor.execute(query)
-
-for (first_name, last_name) in cursor:
-  print("{}, {} was hired on".format(
-    last_name, first_name))
-cursor.close()
-cnx.close()
