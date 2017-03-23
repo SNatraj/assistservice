@@ -3,6 +3,12 @@
 import urllib
 import json
 import os
+import mysql.connector
+
+cnx = mysql.connector.connect(user='scott', password='Natraj123$',
+                              host='35.160.103.78',
+                              database='idea_zomato')
+cursor=cnx.cursor()
 
 from flask import Flask
 from flask import request
@@ -20,12 +26,30 @@ def webhook():
     print(json.dumps(req, indent=4))
 
     res = makeWebhookResult(req)
+	
+	add_employee = ("INSERT INTO employees "
+               "(first_name,last_name,gender) "
+               "VALUES (%s,%s, %s,)")
 
+
+	data_employee = ('Abc', 'ABC','M')
+
+	# Insert new employee
+	cursor.execute(add_employee, data_employee)
+
+	# Make sure data is committed to the database
+	cnx.commit()
+
+	cursor.close()
+	cnx.close()
+	
     res = json.dumps(res, indent=4)
     print(res)
     r = make_response(res)
     r.headers['Content-Type'] = 'application/json'
     return r
+	
+
 
 def makeWebhookResult(req):
     if req.get("result").get("action") != "food.discovery":
