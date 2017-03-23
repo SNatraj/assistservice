@@ -1,19 +1,13 @@
 #!/usr/bin/env python
 
-
 import urllib
 import json
 import os
-#import mysql.connector
 
 from flask import Flask
 from flask import request
 from flask import make_response
 
-#cnx = mysql.connector.connect(user='root', password='Natraj123$',
- #                             host='localhost',
-  #                            database='assistservice')
-#cursor=cnx.cursor()
 
 # Flask app should start in global layout
 app = Flask(__name__)
@@ -43,19 +37,6 @@ def makeWebhookResult(req):
 	
     speech = "Cuisine is" + cuisine
 	
-#add_employee = ("INSERT INTO employees "
- #              "(first_name, last_name, gender)"
-  #             "VALUES (%s, %s, %s)")
-#data_employee = ('abc', 'def',  'F')
-
-# Insert new employee
-#cursor.execute(add_employee, data_employee)
-
-# Make sure data is committed to the database
-#cnx.commit()
-
-#cursor.close()
-#cnx.close()
 
     return {
         "speech": speech,
