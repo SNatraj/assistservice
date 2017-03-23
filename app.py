@@ -37,6 +37,9 @@ def makeWebhookResult(req):
 	
     speech = "Cuisine is" + cuisine
 	
+	print("Response:")
+    print(speech)
+
 
     return {
         "speech": speech,
