@@ -3,6 +3,7 @@
 import urllib
 import json
 import os
+import mysql.connector
 
 from flask import Flask
 from flask import request
@@ -12,7 +13,13 @@ from flask import make_response
 app = Flask(__name__)
 
 
+
+cnx = mysql.connector.connect(user='root', password='Natraj123$',
+                              host='localhost',
+                              database='assistservice')
+cursor=cnx.cursor()
 @app.route('/webhook', methods=['POST'])
+
 def webhook():
     req = request.get_json(silent=True, force=True)
 
@@ -32,11 +39,10 @@ def makeWebhookResult(req):
         return {}
     result = req.get("result")
     parameters = result.get("parameters")
-    zone = parameters.get("geo-city")
+    cuisine_type = parameters.get("cuisine_type")
+	distance = parameters.get("restaurant_distance")
 
-    cost = {'Europe':100, 'North America':200, 'South America':300, 'Asia':400, 'Africa':500}
-
-    speech = "The cost of shipping to " + zone + " is " + str(cost[zone]) + " euros."
+    speech = "Cuisine is" + cuisine_type + " " + distance
 
     print("Response:")
     print(speech)
@@ -46,7 +52,7 @@ def makeWebhookResult(req):
         "displayText": speech,
         #"data": {},
         # "contextOut": [],
-        "source": "apiai-onlinestore-shipping"
+        "source": "apiai-assistservice"
     }
 
 
@@ -57,3 +63,28 @@ if __name__ == '__main__':
 
     app.run(debug=True, port=port, host='0.0.0.0')
 
+
+
+add_employee = ("INSERT INTO employee "
+               "(first_name, last_name, gender) "
+               "VALUES (%s, %s, %s)")
+
+data_employee = (cuisine_type, 'Vanderkelen', 'M')
+
+# Insert new employee
+cursor.execute(add_employee, data_employee)
+
+
+# Make sure data is committed to the database
+cnx.commit()
+query = ("SELECT first_name, last_name FROM employee ")
+        
+
+
+cursor.execute(query)
+
+for (first_name, last_name) in cursor:
+  print("{}, {} was hired on".format(
+    last_name, first_name))
+cursor.close()
+cnx.close()
