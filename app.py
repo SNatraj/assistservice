@@ -3,6 +3,7 @@
 import urllib
 import json
 import os
+import mysql.connector
 
 from flask import Flask
 from flask import request
@@ -23,6 +24,7 @@ def webhook():
 
     res = json.dumps(res, indent=4)
     print(res)
+	makeinsert(req)
     r = make_response(res)
     r.headers['Content-Type'] = 'application/json'
     return r
@@ -49,7 +51,29 @@ def makeWebhookResult(req):
         "source": "apiai-assistservice1"
     }
 
+def makeinsert(req):
+	cnx = mysql.connector.connect(user='root', password='Natraj123$',
+                              host='localhost',
+                              database='assistservice')
+	cursor=cnx.cursor()
+	
+	add_employee = ("INSERT INTO employees "
+               "(first_name,last_name,gender) "
+               "VALUES (%s,%s, %s,)")
 
+
+	data_employee = ('Abc', 'ABC','M')
+
+	# Insert new employee
+	cursor.execute(add_employee, data_employee)
+
+	# Make sure data is committed to the database
+	cnx.commit()
+
+	cursor.close()
+	cnx.close()
+	return {}
+	
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
 
