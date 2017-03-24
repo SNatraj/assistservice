@@ -1,28 +1,58 @@
 #!/usr/bin/env python
 
-import mysql.connector
+import urllib
+import json
+import os
+
+from flask import Flask
+from flask import request
+from flask import make_response
+
+# Flask app should start in global layout
+app = Flask(__name__)
 
 
-	cnx = mysql.connector.connect(user='root', password='Natraj123$',
-                              host='localhost',
-                              database='assistservice')
-	cursor=cnx.cursor()
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    req = request.get_json(silent=True, force=True)
+
+    print("Request:")
+    print(json.dumps(req, indent=4))
+
+    res = makeWebhookResult(req)
+
+    res = json.dumps(res, indent=4)
+    print(res)
+    r = make_response(res)
+    r.headers['Content-Type'] = 'application/json'
+    return r
+
+def makeWebhookResult(req):
+    if req.get("result").get("action") != "food.discovery":
+        return {}
+    result = req.get("result")
+    parameters = result.get("parameters")
+    cuisine = parameters.get("cuisine-type")
+
+ 
+
+    speech = "Cuisine is " + parameters.get("cuisine-type") + " " + parameters.get("restaurant-distance")
 	
-	add_employee = ("INSERT INTO employees "
-               "(first_name,last_name,gender) "
-               "VALUES (%s,%s, %s,)")
+    print("Response:")
+    print(speech)
+
+    return {
+        "speech": speech,
+        "displayText": speech,
+        #"data": {},
+        # "contextOut": [],
+        "source": "apiai-assistservice1"
+    }
 
 
-	data_employee = ('Abc', 'ABC','M')
+if __name__ == '__main__':
+    port = int(os.getenv('PORT', 5000))
 
-	# Insert new employee
-	cursor.execute(add_employee, data_employee)
+    print "Starting app on port %d" % port
 
-	# Make sure data is committed to the database
-	cnx.commit()
-
-	cursor.close()
-	cnx.close()
-
-	
-
+    app.run(debug=True, port=port, host='0.0.0.0')
