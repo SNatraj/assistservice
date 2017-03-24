@@ -7,10 +7,17 @@ import os
 from flask import Flask
 from flask import request
 from flask import make_response
+from flaskext.mysql import MySQL
 
+mysql = MySQL()
 # Flask app should start in global layout
-app = Flask(__name__)
 
+app = Flask(__name__)
+app.config['MYSQL_DATABASE_USER'] = 'root'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'Natraj123$'
+app.config['MYSQL_DATABASE_DB'] = 'assistservice'
+app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+mysql.init_app(app)
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
