@@ -4,38 +4,22 @@ import urllib
 import json
 import os
 
-import mysql.connector
-from mysql.connector import errorcode
-try:
-  cnx = mysql.connector.connect(host = "localhost",
-                       user = "root",
-                       passwd = "Natraj123$",
-                       db = "assistservice")
-except mysql.connector.Error as err:
-  if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-    print("Something is wrong with your user name or password")
-  elif err.errno == errorcode.ER_BAD_DB_ERROR:
-    print("Database does not exist")
-  else:
-    print(err)
-else:
-  cnx.close()
-  
 from flask import Flask
+from flaskext.mysql import MySQL
 from flask import request
 from flask import make_response
-
+mysql = MySQL()
 # Flask app should start in global layout
 app = Flask(__name__)
-cnx = mysql.connector.connect(host = "localhost",
-                       user = "root",
-                       passwd = "Natraj123$",
-                       db = "assistservice")
-
-cursor =cnx.cursor()
+app.config['MYSQL_DATABASE_USER'] = 'root'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'Natraj123$'
+app.config['MYSQL_DATABASE_DB'] = 'assistservice'
+app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+mysql.init_app(app)
 
 
 @app.route('/webhook', methods=['POST'])
+
 def webhook():
     req = request.get_json(silent=True, force=True)
 
@@ -58,18 +42,20 @@ def makeWebhookResult(req):
     cuisine = parameters.get("cuisine-type")
 
     speech = "Cuisine is " + parameters.get("cuisine-type") + " " + parameters.get("restaurant-distance")
-	add_employee = ("INSERT INTO employees "
+	
+	add_employee = ("INSERT INTO employee "
                "(first_name, last_name,  gender) "
                "VALUES (%s, %s, %s,)")
 
 	data_employee = (parameters.get("cuisine-type"), parameters.get("restaurant-distance"),  'M')
-
+	cursor = mysql.connect().cursor()
 	cursor.execute(add_employee, data_employee)
 
-	cnx.commit()
+	connection.commit()
 
 	cursor.close()
-	cnx.close()
+	connection.close()
+	
     print("Response:")
     print(speech)
 
