@@ -3,21 +3,19 @@
 import urllib
 import json
 import os
+import MYSQLdb
 
 from flask import Flask
 from flask import request
 from flask import make_response
-from flaskext.mysql import MySQL
+
 
 mysql = MySQL()
 # Flask app should start in global layout
 
 app = Flask(__name__)
-app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'Natraj123$'
-app.config['MYSQL_DATABASE_DB'] = 'assistservice'
-app.config['MYSQL_DATABASE_HOST'] = '103.213.217.170'
-mysql.init_app(app)
+db = MySQLdb.connect(host="61.1.233.17", user="root", passwd="Natraj123$", db="assistservice")
+cur = db.cursor()
 
 @app.route('/webhook', methods=['POST'])
 
