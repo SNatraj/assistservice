@@ -16,10 +16,11 @@ app = Flask(__name__)
 app.config['MYSQL_DATABASE_USER'] = 'root'
 app.config['MYSQL_DATABASE_PASSWORD'] = 'Natraj123$'
 app.config['MYSQL_DATABASE_DB'] = 'assistservice'
-app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+app.config['MYSQL_DATABASE_HOST'] = '103.213.217.170'
 mysql.init_app(app)
 
 @app.route('/webhook', methods=['POST'])
+
 def webhook():
     req = request.get_json(silent=True, force=True)
 
