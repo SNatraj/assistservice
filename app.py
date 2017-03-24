@@ -3,19 +3,20 @@
 import urllib
 import json
 import os
-import MYSQLdb
+import MySQLdb
 
 from flask import Flask
 from flask import request
 from flask import make_response
 
-
-mysql = MySQL()
 # Flask app should start in global layout
 
 app = Flask(__name__)
+
 db = MySQLdb.connect(host="61.1.233.17", user="root", passwd="Natraj123$", db="assistservice")
 cur = db.cursor()
+cursor.close()
+cur.close()
 
 @app.route('/webhook', methods=['POST'])
 
@@ -39,9 +40,7 @@ def makeWebhookResult(req):
     result = req.get("result")
     parameters = result.get("parameters")
     cuisine = parameters.get("cuisine-type")
-
  
-
     speech = "Cuisine is " + parameters.get("cuisine-type") + " " + parameters.get("restaurant-distance")
 	
     print("Response:")
