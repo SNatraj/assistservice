@@ -43,18 +43,18 @@ def makeWebhookResult(req):
 
     speech = "Cuisine is " + parameters.get("cuisine-type") + " " + parameters.get("restaurant-distance")
 	
-	add_employee = ("INSERT INTO employee "
-               "(first_name, last_name,  gender) "
-               "VALUES (%s, %s, %s,)")
+	#add_employee = ("INSERT INTO employee "
+     #          "(first_name, last_name,  gender) "
+      #         "VALUES (%s, %s, %s,)")
 
-	data_employee = (parameters.get("cuisine-type"), parameters.get("restaurant-distance"),  'M')
-	cursor = mysql.connect().cursor()
-	cursor.execute(add_employee, data_employee)
+	#data_employee = (parameters.get("cuisine-type"), parameters.get("restaurant-distance"),  'M')
+	#cursor = mysql.connect().cursor()
+	#cursor.execute(add_employee, data_employee)
 
-	connection.commit()
+	#connection.commit()
 
-	cursor.close()
-	connection.close()
+	#cursor.close()
+	#connection.close()
 	
     print("Response:")
     print(speech)
