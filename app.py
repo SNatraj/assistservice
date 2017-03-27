@@ -8,7 +8,7 @@ import os
 #import mysql.connector
 
 from flask import Flask, flash, url_for, redirect, render_template, jsonify, request, make_response
-#from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.sqlalchemy import SQLAlchemy
 #from sqlalchemy.sql import text
 
 # Flask app should start in global layout
