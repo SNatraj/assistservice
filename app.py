@@ -5,7 +5,8 @@ import json
 import os
 
 from flask import Flask, flash, url_for, redirect, render_template
-#from flask_sqlalchemy import SQLAlchemy
+from flask.ext.sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import text
 from flask import request
 from flask import make_response
 
