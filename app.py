@@ -3,22 +3,46 @@
 import urllib
 import json
 import os import environ
+import MySQLdb
+import urlparse
+
 
 from flask import Flask, flash, url_for, redirect, render_template, jsonify
-from flask.ext.sqlalchemy import SQLAlchemy
-
-
 from flask import request
 from flask import make_response
 
 # Flask app should start in global layout
 app = Flask(__name__)
-app.config.from_object(os.environ['CLEARDB_DATABASE_URL'])
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+urlparse.uses_netloc.append('mysql')
 
-db = SQLAlchemy(app)
+try:
 
+    # Check to make sure DATABASES is set in settings.py file.
+    # If not default to {}
 
+    if 'DATABASES' not in locals():
+        DATABASES = {}
+
+    if 'DATABASE_URL' in os.environ:
+        url = urlparse.urlparse(os.environ['DATABASE_URL'])
+
+        # Ensure default database exists.
+        DATABASES['default'] = DATABASES.get('default', {})
+
+        # Update with environment configuration.
+        DATABASES['default'].update({
+            'NAME': url.path[1:],
+            'USER': url.username,
+            'PASSWORD': url.password,
+            'HOST': url.hostname,
+            'PORT': url.port,
+        })
+		
+except Exception:
+    print 'Unexpected error:', sys.exc_info()
+
+db = MySQLdb.connect(HOST, USER, PASSWORD, NAME)
+cursor = db.cursor()
 
 
 @app.route('/webhook', methods=['POST'])
@@ -43,6 +67,15 @@ def makeWebhookResult(req):
     parameters = result.get("parameters")
     cuisine = parameters.get("cuisine-type")
 
+	query = "INSERT INTO  (action, cuisine_type,distance) VALUES(:action-data,:cuisine-type-data,:restaurant-distance-data)"
+	data = {
+					'action-data': req.get("result").get("action"),
+					'cuisine-type-data': parameters.get("cuisine-type"),
+					'restaurant-distance-data': parameters.get("restaurant-distance"),
+		   }
+    
+	cursor.execute(query,data)
+	db.commit()
  
 
     speech = "Cuisine is " + parameters.get("cuisine-type") + " " + parameters.get("restaurant-distance")
