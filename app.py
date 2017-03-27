@@ -11,7 +11,8 @@ from flask import make_response
 
 # Flask app should start in global layout
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = CLEARDB_DATABASE_URL
+config_obj = os.environ.get("CLEARDB_DATABASE_URL", "config.test")
+app.config.from_object(config_obj)
 db = SQLAlchemy(app)
 
 @app.route('/webhook', methods=['POST'])
