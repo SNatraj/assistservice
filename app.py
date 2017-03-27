@@ -4,13 +4,15 @@ import urllib
 import json
 import os
 
-from flask import Flask
+from flask import Flask, flash, url_for, redirect, render_template
+from flask_sqlalchemy import SQLAlchemy
 from flask import request
 from flask import make_response
 
 # Flask app should start in global layout
 app = Flask(__name__)
-
+app.config['SQLALCHEMY_DATABASE_URI'] = CLEARDB_DATABASE_URL
+db = SQLAlchemy(app)
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
