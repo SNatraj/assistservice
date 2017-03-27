@@ -4,17 +4,16 @@ import urllib
 import json
 import os
 
-from flask import Flask, request, flash, url_for, redirect, render_template,redirect 
+from flask import Flask, flash, url_for, redirect, render_template
 from flask_sqlalchemy import SQLAlchemy
-#from flask import Flask
 from flask import request
 from flask import make_response
 
 
 # Flask app should start in global layout
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = CLEARDB_DATABASE_URL
-db = SQLAlchemy(app)
+#app.config['SQLALCHEMY_DATABASE_URI'] = CLEARDB_DATABASE_URL
+#db = SQLAlchemy(app)
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -41,16 +40,19 @@ def makeWebhookResult(req):
  
 
     speech = "Cuisine is " + parameters.get("cuisine-type") + " " + parameters.get("restaurant-distance")
-	query = "INSERT INTO  (action, cuisine_type,distance) VALUES(:action-data,:cuisine-type-data,:-restaurant-distance-data)"
-	data = {
-					'action-data': req.get("result").get("action"),
-					'cuisine-type-data': parameters.get("cuisine-type"),
-					'restaurant-distance-data': parameters.get("restaurant-distance"),
-				}
-    mysql.query_db(query, data)
 	
 	print("Response:")
     print(speech)
+	
+	#query = "INSERT INTO  (action, cuisine_type,distance) VALUES(:action-data,:cuisine-type-data,:restaurant-distance-data)"
+	#data = {
+	#				'action-data': req.get("result").get("action"),
+	#				'cuisine-type-data': parameters.get("cuisine-type"),
+	#				'restaurant-distance-data': parameters.get("restaurant-distance"),
+	#	   }
+    #mysql.query_db(query, data)
+	
+
 
     return {
         "speech": speech,
