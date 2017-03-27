@@ -5,15 +5,15 @@ import json
 import os
 
 from flask import Flask, flash, url_for, redirect, render_template
-from flask_sqlalchemy import SQLAlchemy
+#from flask_sqlalchemy import SQLAlchemy
 from flask import request
 from flask import make_response
 
 # Flask app should start in global layout
 app = Flask(__name__)
-config_obj = os.environ.get("CLEARDB_DATABASE_URL", "config.test")
-app.config.from_object(config_obj)
-db = SQLAlchemy(app)
+#config_obj = os.environ.get("CLEARDB_DATABASE_URL", "config.test")
+#app.config.from_object(config_obj)
+#db = SQLAlchemy(app)
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
