@@ -3,49 +3,26 @@
 import urllib
 import json
 import os import environ
-import MySQLdb
-import urlparse
-
+#import MySQLdb
+#import urlparse
+#import mysql.connector
 
 from flask import Flask, flash, url_for, redirect, render_template, jsonify
 from flask import request
 from flask import make_response
+from flask.ext.sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import text
 
 # Flask app should start in global layout
 app = Flask(__name__)
-urlparse.uses_netloc.append('mysql')
-
-try:
-
-    # Check to make sure DATABASES is set in settings.py file.
-    # If not default to {}
-
-    if 'DATABASES' not in locals():
-        DATABASES = {}
-
-    if 'DATABASE_URL' in os.environ:
-        url = urlparse.urlparse(os.environ['DATABASE_URL'])
-
-        # Ensure default database exists.
-        DATABASES['default'] = DATABASES.get('default', {})
-
-        # Update with environment configuration.
-        DATABASES['default'].update({
-            'NAME': url.path[1:],
-            'USER': url.username,
-            'PASSWORD': url.password,
-            'HOST': url.hostname,
-            'PORT': url.port,
-        })
-		
-except Exception:
-    print 'Unexpected error:', sys.exc_info()
-
-db = MySQLdb.connect(HOST, USER, PASSWORD, NAME)
+app.config.setdefault('SQLALCHEMY_DATABASE_URI', environ.get('DATABASE_URL'))
+#app.config['SQLALCHEMY_DATABASE_URI'] = CLEARDB_DATABASE_URL
+db = SQLAlchemy(app)
 cursor = db.cursor()
 
 
 @app.route('/webhook', methods=['POST'])
+
 def webhook():
     req = request.get_json(silent=True, force=True)
 
@@ -69,9 +46,10 @@ def makeWebhookResult(req):
 
 	query = "INSERT INTO  (action, cuisine_type,distance) VALUES(:action-data,:cuisine-type-data,:restaurant-distance-data)"
 	data = {
-					'action-data': req.get("result").get("action"),
-					'cuisine-type-data': parameters.get("cuisine-type"),
-					'restaurant-distance-data': parameters.get("restaurant-distance"),
+				'action-data': req.get("result").get("action"),
+				'cuisine-type-data': parameters.get("cuisine-type"),
+				
+				'restaurant-distance-data': parameters.get("restaurant-distance"),
 		   }
     
 	cursor.execute(query,data)
