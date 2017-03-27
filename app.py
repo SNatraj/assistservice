@@ -2,7 +2,7 @@
 
 import urllib
 import json
-import os import environ
+import os 
 #import MySQLdb
 #import urlparse
 #import mysql.connector
