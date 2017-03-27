@@ -3,33 +3,16 @@
 import urllib
 import json
 import os
-#import mysql.connector
 
 from flask import Flask
 from flask import request
 from flask import make_response
 
 # Flask app should start in global layout
-
 app = Flask(__name__)
 
-#db = mysql.connector.connect(
- #   'driver'    => 'mysql',
-  # 'host'      => env('DB_HOST', 'us-cdbr-iron-east-03.cleardb.net'),
-  #  'database'  => env('DB_DATABASE', 'heroku_07453e514633ec3'),
-  # 'username'  => env('DB_USERNAME', 'b4d6e46002fc68'),
-  #  'password'  => env('DB_PASSWORD', '55fbc72d'),
-  #  'charset'   => 'utf8',
-  #  'collation' => 'utf8_unicode_ci',
-  #  'prefix'    => '',
-  #  'strict'    => false)
-
-#cur = db.cursor()
-#cursor.close()
-#cur.close()
 
 @app.route('/webhook', methods=['POST'])
-
 def webhook():
     req = request.get_json(silent=True, force=True)
 
@@ -50,7 +33,9 @@ def makeWebhookResult(req):
     result = req.get("result")
     parameters = result.get("parameters")
     cuisine = parameters.get("cuisine-type")
+
  
+
     speech = "Cuisine is " + parameters.get("cuisine-type") + " " + parameters.get("restaurant-distance")
 	
     print("Response:")
