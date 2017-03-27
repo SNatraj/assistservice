@@ -3,7 +3,7 @@
 import urllib
 import json
 import os
-import MySQLdb
+import mysql.connector
 
 from flask import Flask
 from flask import request
@@ -13,7 +13,17 @@ from flask import make_response
 
 app = Flask(__name__)
 
-db = MySQLdb.connect(host="61.1.233.17", user="root", passwd="Natraj123$", db="assistservice")
+db = mysql.connector.connect(
+    'driver'    => 'mysql',
+    'host'      => env('DB_HOST', 'us-cdbr-iron-east-03.cleardb.net'),
+    'database'  => env('DB_DATABASE', 'heroku_07453e514633ec3'),
+    'username'  => env('DB_USERNAME', 'b4d6e46002fc68'),
+    'password'  => env('DB_PASSWORD', '55fbc72d'),
+    'charset'   => 'utf8',
+    'collation' => 'utf8_unicode_ci',
+    'prefix'    => '',
+    'strict'    => false)
+
 cur = db.cursor()
 cursor.close()
 cur.close()
