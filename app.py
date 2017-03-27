@@ -5,7 +5,7 @@ import json
 import os 
 #import MySQLdb
 #import urlparse
-#import mysql.connector
+import mysql.connector
 
 from flask import Flask, flash, url_for, redirect, render_template, jsonify, request, make_response
 #from flask.ext.sqlalchemy import SQLAlchemy
@@ -16,7 +16,19 @@ app = Flask(__name__)
 #app.config.setdefault('SQLALCHEMY_DATABASE_URI', environ.get('DATABASE_URL'))
 #app.config['SQLALCHEMY_DATABASE_URI'] = CLEARDB_DATABASE_URL
 #db = SQLAlchemy(app)
-#cursor = db.cursor()
+
+db = mysql.connector.connect(
+   'driver'    => 'mysql',
+   'host'      => env('DB_HOST', 'us-cdbr-iron-east-03.cleardb.net'),
+    'database'  => env('DB_DATABASE', 'heroku_07453e514633ec3'),
+   'username'  => env('DB_USERNAME', 'b4d6e46002fc68'),
+    'password'  => env('DB_PASSWORD', '55fbc72d'),
+    'charset'   => 'utf8',
+    'collation' => 'utf8_unicode_ci',
+    'prefix'    => '',
+    'strict'    => false)
+
+cursor = db.cursor()
 
 
 @app.route('/webhook', methods=['POST'])
