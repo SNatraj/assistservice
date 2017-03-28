@@ -2,7 +2,7 @@
 
 import json
 import os 
-#import mySQLdb
+import mySQLdb
 
 #hostname='sql3.freemysqlhosting.net'
 #username='sql3166077'
