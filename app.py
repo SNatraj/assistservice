@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+from flask import Flask
+from flask import request
+from flask import make_response
+
 import json
 import os 
 import mySQLdb
@@ -22,9 +26,6 @@ import mySQLdb
     #cursor = conn.cursor()
 
 
-from flask import Flask
-from flask import request
-from flask import make_response
 
 # Flask app should start in global layout
 app = Flask(__name__)
