@@ -2,12 +2,25 @@
 
 import json
 import os 
-import mysql.connector
+import mySQLdb
 
-cnx = mysql.connector.connect(user='sql3166077', password='1K9R5ikdFX',
-                              host='sql3.freemysqlhosting.net',
-                              database='sql3166077')
-cursor=cnx.cursor()
+hostname='sql3.freemysqlhosting.net'
+username='sql3166077'
+password='1K9R5ikdFX'
+dbname='sql3166077'
+port= 3306
+charset='utf8'
+try:
+    conn = MySQLdb.connect(
+        host=hostname,
+        user=username,
+        passwd=password,
+        db=dbname,
+        port=port,
+        charset=charset,
+        )
+    cursor = conn.cursor()
+
 
 from flask import Flask
 from flask import request
@@ -39,18 +52,18 @@ def makeWebhookResult(req):
     parameters = result.get("parameters")
     cuisine = parameters.get("cuisine-type")
 
-query = "INSERT INTO  EntitySessionTestTbl (action, cuisine_type,distance) VALUES(:action-data,:cuisine-type-data,:restaurant-distance-data)"
+	query = "INSERT INTO  EntitySessionTestTbl (action, cuisine_type,distance) VALUES(:action-data,:cuisine-type-data,:restaurant-distance-data)"
 
-data = {
-		'action-data': req.get("result").get("action"),
-		'cuisine-type-data': parameters.get("cuisine-type"),
-		'restaurant-distance-data': parameters.get("restaurant-distance"),
-		}
+	data = {
+			'action-data': req.get("result").get("action"),
+			'cuisine-type-data': parameters.get("cuisine-type"),
+			'restaurant-distance-data': parameters.get("restaurant-distance"),
+			}
     
 	cursor.execute(query,data)
-	cnx.commit()
+	conn.commit()
 	cursor.close()
-	cnx.close()
+	conn.close()
 
     speech = "Cuisine is " + parameters.get("cuisine-type") + " " + parameters.get("restaurant-distance")
 	
