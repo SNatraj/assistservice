@@ -49,7 +49,7 @@ def makeWebhookResult(req):
 	#cursor.close()
 	#conn.close()
 
-    speech = "Cuisine is " + parameters.get("cuisine-type") + " " + parameters.get("restaurant-distance")
+    speech = "Cuisine is "
 	
     print("Response:")
     print(speech)
