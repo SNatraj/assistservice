@@ -1,35 +1,20 @@
 #!/usr/bin/env python
 
-#import urllib
 import json
 import os 
-#import MySQLdb
-#import urlparse
 import mysql.connector
 
-from flask import Flask, flash, url_for, redirect, render_template, jsonify, request, make_response
-#from flask.ext.sqlalchemy import SQLAlchemy
-#from sqlalchemy.sql import text
+cnx = mysql.connector.connect(user='sql3166077', password='1K9R5ikdFX',
+                              host='sql3.freemysqlhosting.net',
+                              database='sql3166077')
+cursor=cnx.cursor()
+
+from flask import Flask
+from flask import request
+from flask import make_response
 
 # Flask app should start in global layout
 app = Flask(__name__)
-#app.config.setdefault('SQLALCHEMY_DATABASE_URI', environ.get('DATABASE_URL'))
-#app.config['SQLALCHEMY_DATABASE_URI'] = CLEARDB_DATABASE_URL
-#db = SQLAlchemy(app)
-
-db = mysql.connector.connect(
-   'driver'    => 'mysql',
-   'host'      => env('DB_HOST', 'us-cdbr-iron-east-03.cleardb.net'),
-    'database'  => env('DB_DATABASE', 'heroku_07453e514633ec3'),
-   'username'  => env('DB_USERNAME', 'b4d6e46002fc68'),
-    'password'  => env('DB_PASSWORD', '55fbc72d'),
-    'charset'   => 'utf8',
-    'collation' => 'utf8_unicode_ci',
-    'prefix'    => '',
-    'strict'    => false)
-
-cursor = db.cursor()
-
 
 @app.route('/webhook', methods=['POST'])
 
@@ -54,17 +39,18 @@ def makeWebhookResult(req):
     parameters = result.get("parameters")
     cuisine = parameters.get("cuisine-type")
 
-#	query = "INSERT INTO  (action, cuisine_type,distance) VALUES(:action-data,:cuisine-type-data,:restaurant-distance-data)"
-#	data = {
-#				'action-data': req.get("result").get("action"),
-#				'cuisine-type-data': parameters.get("cuisine-type"),
-				
-#				'restaurant-distance-data': parameters.get("restaurant-distance"),
-#		   }
+query = "INSERT INTO  EntitySessionTestTbl (action, cuisine_type,distance) VALUES(:action-data,:cuisine-type-data,:restaurant-distance-data)"
+
+data = {
+		'action-data': req.get("result").get("action"),
+		'cuisine-type-data': parameters.get("cuisine-type"),
+		'restaurant-distance-data': parameters.get("restaurant-distance"),
+		}
     
-#	cursor.execute(query,data)
-#	db.commit()
- 
+	cursor.execute(query,data)
+	cnx.commit()
+	cursor.close()
+	cnx.close()
 
     speech = "Cuisine is " + parameters.get("cuisine-type") + " " + parameters.get("restaurant-distance")
 	
