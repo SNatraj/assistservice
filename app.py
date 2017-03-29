@@ -38,32 +38,25 @@ def webhook():
 def processRequest(req):
     if req.get("result").get("action") != "food.discovery":
         return {}
-    
-	baseurl = "https://maps.googleapis.com/maps/api/place/textsearch/json?"
-    
-	search_query = makeSearchQuery(req)
-    
-	if search_query is None:
+    baseurl = "https://query.yahooapis.com/v1/public/yql?"
+    yql_query = makeYqlQuery(req)
+    if yql_query is None:
         return {}
-		
-	mkey = AIzaSyATJ_XciNhA1zgIT3yRgFk8koDu_b0VkMQ
-
-    yql_url = baseurl + urlencode({'query=': search_query}) + urlencode({'&key=': mkey})
-	
+    yql_url = baseurl + urlencode({'q': yql_query}) + "&format=json"
     result = urlopen(yql_url).read()
     data = json.loads(result)
     res = makeWebhookResult(data)
     return res
 
 
-def makeSearchQuery(req):
+def makeYqlQuery(req):
     result = req.get("result")
     parameters = result.get("parameters")
-    #city = parameters.get("geo-city")
-    #if city is None:
-    #   return None
+    city = parameters.get("geo-city")
+    if city is None:
+        return None
 
-    return parameters.get("restaurant-distance") + " " + parameters.get("cuisine-type") + " restaurants"
+    return "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + city + "')"
 
 
 def makeWebhookResult(data):
@@ -72,19 +65,28 @@ def makeWebhookResult(data):
         return {}
 
     result = query.get('results')
-    
-	if result is None:
+    if result is None:
         return {}
 
-    name = result.get('name')
-	
-    if name is None:
+    channel = result.get('channel')
+    if channel is None:
         return {}
 
-     # print(json.dumps(item, indent=4))
+    item = channel.get('item')
+    location = channel.get('location')
+    units = channel.get('units')
+    if (location is None) or (item is None) or (units is None):
+        return {}
 
-    speech = "Restaurant Name " + parameters.get("restaurant-distance") + " " + parameters.get("cuisine-type") + " restaurants"
-	
+    condition = item.get('condition')
+    if condition is None:
+        return {}
+
+    # print(json.dumps(item, indent=4))
+
+    speech = "Today in " + location.get('city') + ": " + condition.get('text') + \
+             ", the temperature is " + condition.get('temp') + " " + units.get('temperature')
+
     print("Response:")
     print(speech)
 
