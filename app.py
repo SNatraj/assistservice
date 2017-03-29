@@ -1,41 +1,84 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+from future.standard_library import install_aliases
+install_aliases()
+
+from urllib.parse import urlparse, urlencode
+from urllib.request import urlopen, Request
+from urllib.error import HTTPError
 
 import json
-import os 
+import os
 
 from flask import Flask
 from flask import request
 from flask import make_response
 
-
 # Flask app should start in global layout
 app = Flask(__name__)
 
-@app.route('/webhook', methods=['POST'])
 
+@app.route('/webhook', methods=['POST'])
 def webhook():
     req = request.get_json(silent=True, force=True)
 
     print("Request:")
     print(json.dumps(req, indent=4))
 
-    res = makeWebhookResult(req)
+    res = processRequest(req)
 
     res = json.dumps(res, indent=4)
-    print(res)
+    # print(res)
     r = make_response(res)
     r.headers['Content-Type'] = 'application/json'
     return r
 
-def makeWebhookResult(req):
+
+def processRequest(req):
     if req.get("result").get("action") != "food.discovery":
         return {}
+    baseurl = "https://maps.googleapis.com/maps/api/place/textsearch/json?"
+    search_query = makeSearchQuery(req)
+    if search_query is None:
+        return {}
+	mkey = "AIzaSyATJ_XciNhA1zgIT3yRgFk8koDu_b0VkMQ"	
+
+    yql_url = baseurl + urlencode({'query=': search_query}) + urlencode({'&key=': mkey}) + "&format=json"
+    result = urlopen(yql_url).read()
+    data = json.loads(result)
+    res = makeWebhookResult(data)
+    return res
+
+
+def makeSearchQuery(req):
     result = req.get("result")
     parameters = result.get("parameters")
-    cuisine = parameters.get("cuisine-type")
+    #city = parameters.get("geo-city")
+    #if city is None:
+    #   return None
 
-    speech = "Intent :"  + req.get("result").get("action") + " Distance : " + parameters.get("restaurant-distance") + " Cuisine-type :" + parameters.get("cuisine-type")
+    return parameters.get("restaurant-distance") + " " + parameters.get("cuisine-type") + " restaurants"
+
+
+def makeWebhookResult(data):
+    query = data.get('query')
+    if query is None:
+        return {}
+
+    result = query.get('results')
+    
+	if result is None:
+        return {}
+
+    name = result.get('name')
+	
+    if name is None:
+        return {}
+
+     # print(json.dumps(item, indent=4))
+
+    speech = "Restaurant Name " + name
 	
     print("Response:")
     print(speech)
@@ -43,15 +86,15 @@ def makeWebhookResult(req):
     return {
         "speech": speech,
         "displayText": speech,
-        #"data": {},
+        # "data": data,
         # "contextOut": [],
-        "source": "apiai-assistservice1"
+        "source": "apiai-weather-webhook-sample"
     }
 
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
 
-    print "Starting app on port %d" % port
+    print("Starting app on port %d" % port)
 
-    app.run(debug=True, port=port, host='0.0.0.0')
+    app.run(debug=False, port=port, host='0.0.0.0')
