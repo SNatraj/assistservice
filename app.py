@@ -38,11 +38,15 @@ def webhook():
 def processRequest(req):
     if req.get("result").get("action") != "food.discovery":
         return {}
-    baseurl = "https://maps.googleapis.com/maps/api/place/textsearch/json?"
-    search_query = makeSearchQuery(req)
-    if search_query is None:
+    
+	baseurl = "https://maps.googleapis.com/maps/api/place/textsearch/json?"
+    
+	search_query = makeSearchQuery(req)
+    
+	if search_query is None:
         return {}
-	mkey = "AIzaSyATJ_XciNhA1zgIT3yRgFk8koDu_b0VkMQ"	
+		
+	mkey = AIzaSyATJ_XciNhA1zgIT3yRgFk8koDu_b0VkMQ
 
     yql_url = baseurl + urlencode({'query=': search_query}) + urlencode({'&key=': mkey})
 	
