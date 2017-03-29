@@ -83,7 +83,7 @@ def makeWebhookResult(data):
 
      # print(json.dumps(item, indent=4))
 
-    speech = "Restaurant Name " + name
+    speech = "Restaurant Name " + parameters.get("restaurant-distance") + " " + parameters.get("cuisine-type") + " restaurants"
 	
     print("Response:")
     print(speech)
