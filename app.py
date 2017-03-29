@@ -44,7 +44,8 @@ def processRequest(req):
         return {}
 	mkey = "AIzaSyATJ_XciNhA1zgIT3yRgFk8koDu_b0VkMQ"	
 
-    yql_url = baseurl + urlencode({'query=': search_query}) + urlencode({'&key=': mkey}) + "&format=json"
+    yql_url = baseurl + urlencode({'query=': search_query}) + urlencode({'&key=': mkey})
+	
     result = urlopen(yql_url).read()
     data = json.loads(result)
     res = makeWebhookResult(data)
