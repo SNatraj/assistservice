@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 
-from flask import Flask
-from flask import request
-from flask import make_response
-from config import config
 
 import json
 import os 
 
-cursor = conn.cursor()
+from flask import Flask
+from flask import request
+from flask import make_response
+
 
 # Flask app should start in global layout
 app = Flask(__name__)
@@ -36,20 +35,7 @@ def makeWebhookResult(req):
     parameters = result.get("parameters")
     cuisine = parameters.get("cuisine-type")
 
-	#query = "INSERT INTO  EntitySessionTestTbl (action, cuisine_type,distance) VALUES(:action-data,:cuisine-type-data,:restaurant-distance-data)"
-
-	#data = {
-	#		'action-data': req.get("result").get("action"),
-	#		'cuisine-type-data': parameters.get("cuisine-type"),
-	#		'restaurant-distance-data': parameters.get("restaurant-distance"),
-	#		}
-    
-	#cursor.execute(query,data)
-	#conn.commit()
-	#cursor.close()
-	#conn.close()
-
-    speech = "Cuisine is "
+    speech = "Intent :"  + req.get("result").get("action") + " Distance : " + parameters.get("restaurant-distance") + " Cuisine-type :" + parameters.get("cuisine-type")
 	
     print("Response:")
     print(speech)
